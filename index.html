@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>General Knowledge Quiz</title>
+  <style>
+    /* ---------- CSS ---------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #007bff, #00c6ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+    }
+
+    .quiz-container {
+      background: #ffffff20;
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      width: 400px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      text-align: center;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button.option {
+      background: #fff;
+      color: #333;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button.option:hover {
+      background: #00c6ff;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .next-btn {
+      margin-top: 20px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      display: none;
+      transition: background 0.3s;
+    }
+
+    .next-btn:hover {
+      background: #0056b3;
+    }
+
+    .score {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #fff;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      color: #fff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>General Knowledge Quiz</h1>
+    <div class="question" id="question">Loading question...</div>
+    <div class="options" id="options"></div>
+    <button class="next-btn" id="nextBtn">Next Question</button>
+    <div class="score" id="score"></div>
+  </div>
+  <footer>Made by Sambhavi Parmar ✨</footer>
+
+  <script>
+    // ---------- JAVASCRIPT ----------
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const scoreEl = document.getElementById("score");
+
+    let score = 0;
+    let currentQuestion = {};
+    let acceptingAnswers = true;
+
+    // Sample General Knowledge Questions (you can add 100s here)
+    const questions = [
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Jupiter", "Venus"],
+        answer: "Mars",
+      },
+      {
+        question: "Who wrote the national anthem of India?",
+        options: ["Rabindranath Tagore", "Mahatma Gandhi", "Subhash Chandra Bose", "Jawaharlal Nehru"],
+        answer: "Rabindranath Tagore",
+      },
+      {
+        question: "Which gas do plants absorb during photosynthesis?",
+        options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Helium"],
+        answer: "Carbon Dioxide",
+      },
+      {
+        question: "Which is the largest ocean in the world?",
+        options: ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"],
+        answer: "Pacific Ocean",
+      },
+      {
+        question: "What is the capital of Japan?",
+        options: ["Tokyo", "Beijing", "Seoul", "Bangkok"],
+        answer: "Tokyo",
+      },
+    ];
+
+    // Load a new random question
+    function loadQuestion() {
+      acceptingAnswers = true;
+      nextBtn.style.display = "none";
+      const randomIndex = Math.floor(Math.random() * questions.length);
+      currentQuestion = questions[randomIndex];
+
+      questionEl.textContent = currentQuestion.question;
+      optionsEl.innerHTML = "";
+
+      currentQuestion.options.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.classList.add("option");
+        btn.textContent = opt;
+        btn.addEventListener("click", selectAnswer);
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    // Handle answer selection
+    function selectAnswer(e) {
+      if (!acceptingAnswers) return;
+      acceptingAnswers = false;
+
+      const selectedBtn = e.target;
+      const selectedAnswer = selectedBtn.textContent;
+
+      if (selectedAnswer === currentQuestion.answer) {
+        selectedBtn.style.background = "#28a745";
+        selectedBtn.style.color = "#fff";
+        score++;
+      } else {
+        selectedBtn.style.background = "#dc3545";
+        selectedBtn.style.color = "#fff";
+      }
+
+      scoreEl.textContent = `Score: ${score}`;
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      loadQuestion();
+    });
+
+    // Start quiz
+    loadQuestion();
+  </script>
+</body>
+</html>
